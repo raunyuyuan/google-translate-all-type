@@ -3,11 +3,7 @@ const translate = require('../google-translate-api')
  * 翻译各种数据结构
  * 对象只翻译value,如果value是对象或者数组,提取出来,翻译值都是string的对象
  * 数组中有对象或者数组,提取出来,翻译都是string的数组.
- * 提取出来的数据通过递归继续处理,处理完毕通过putData函数,以及记录的deep深度,对应的key放入原有的位置
- * @function putData
- *  @param {array or value} results
- * @param {*} from 
- * @param {*} to 
+ * 提取出来的数据通过递归继续处理,处理完毕对应的key放入原有的位置 
  */
 const translateFullStringArray = (array, from, to = 'zh-CN') => {
     return translate(JSON.stringify(array), {
