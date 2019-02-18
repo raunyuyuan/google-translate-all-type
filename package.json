@@ -1,0 +1,15 @@
+{
+  "name": "googleTranslate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node ./src/test.js"
+  },
+  "dependencies": {
+    "configstore": "^4.0.0",
+    "got": "^9.6.0",
+    "querystring": "^0.2.0",
+    "safe-eval": "^0.4.1"
+  }
+}
