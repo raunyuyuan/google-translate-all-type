@@ -6,12 +6,13 @@ const translate = require('../google-translate-api')
  * 提取出来的数据通过递归继续处理,处理完毕对应的key放入原有的位置 
  */
 const translateFullStringArray = (array, from, to = 'zh-CN') => {
-    return translate(JSON.stringify(array), {
+    return translate(array.join('+-1.....-'), {
         from: from,
         to: to || 'en'
     }).then(ress => {
         let returnString = ress.text.replace(/\s*(\[|\]|“|”)\s*/g, '');
-        return returnString.split('，')
+        return returnString.split('+ -1 .....-')
+        
     }).catch(err => {
         return []
     })
@@ -23,12 +24,12 @@ const translateObj = (obj, from, to = 'zh-CN') => {
     for (let i = 0; i < keys.length; i++) {
         values.push(obj[keys[i]])
     }
-    return translate(JSON.stringify(values), {
+    return translate(values.join('+-1.....-'), {
         from: from,
         to: to || 'en'
     }).then(ress => {
         let returnString = ress.text.replace(/\s*(\[|\]|“|”)\s*/g, '');
-        const resultArray = returnString.split('，');
+        const resultArray = returnString.split('+ -1 .....-');
         const result = {};
         for (let i = 0; i < keys.length; i++) {
             result[keys[i]] = resultArray[i]
@@ -55,7 +56,7 @@ const translateEveryType = async (target, from, to) => {
         const len = target.length
         for (let i = 0; i < len; i++) {
             const type = typeof target[i]
-            if (type !== 'string' || type !== 'number') {
+            if (type !== 'string' && type !== 'number') {
                 notStrElems.push(target[i])
                 hasObjIdxs.push(i)
             }
@@ -79,6 +80,7 @@ const translateEveryType = async (target, from, to) => {
                 const data = await translateEveryType(notStrElems[i], from, to)
                 result.splice(hasObjIdxs[i], 0 , data)
             }
+            return result
         })
     } else if (typeof target === 'string' || typeof target === 'number') {
         return translateString(target, from, to).then(result => {
@@ -91,7 +93,8 @@ const translateEveryType = async (target, from, to) => {
         let targetLen = 0
         for (let key in target) {
             targetLen++
-            if (typeof target[key] !== 'string' || typeof target[key] !== 'number') {
+            const type = typeof target[key]
+            if (type !== 'string' && type !== 'number') {
                 notStrElems.push(target[key])
                 hasObjkeys.push(key)
             }
